@@ -79,7 +79,7 @@ let questions = [
         container.appendChild(highscoreButton);
     });   
 
-    // function to display high scores:
+    // function to display high scores
     highscoreButton.addEventListener("click", function () {
         displayScores();
         highscoreButton.remove();
@@ -88,3 +88,44 @@ let questions = [
         hideAll();
     });
 
+    //gets questions from objects and shows question in container element
+    function getCurrentQuestion() {
+        questionEl.textContent = questions[score].question;
+        container.appendChild(questionEl);
+    }
+
+    // creates same amount of buttons as amount of answers (4)
+    function generateGame() {
+        for (let i = 0; i < questions[score].answers.length; i++) {
+            let answerButton = document.createElement("button");
+            answerButton.textContent = questions[score].answers[i];
+            container.appendChild(answerButton);
+    
+            buttons.push(answerButton);
+    
+            //If correct answer is chosen, move to next question
+            answerButton.addEventListener("click", function () {
+                if (score > (questions.length - 2)) {
+                    winGame();
+                }
+    
+                if (answerButton.textContent === questions[score].correctAnswer) {
+                    score++;
+                    for (let i = 0; i < buttons.length; i++) {
+                        buttons[i].remove();
+                    }
+                    timerCount += 3;
+                    container.appendChild(correctText);
+                    correctText.textContent = "Correct!";
+                    getCurrentQuestion();
+                    generateGame();
+                }
+                //if answer is incorrect shows -5 seconds, text shows: incorrect
+                else {
+                    timerCount -= 5;
+                    correctText.textContent = "Incorrect Answer!";
+                    container.appendChild(correctText);
+                }
+            });
+        }
+    }
