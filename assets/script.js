@@ -129,3 +129,43 @@ let questions = [
             });
         }
     }
+    // function to start timer
+    function startTimer() {
+        timerInterval = setInterval(function () {
+            if (timerCount > 0) {
+                timerCount--;
+                timerText.textContent = timerCount + "seconds remaining";
+            }
+            else {
+                loseGame();
+            }
+        }, 1000);
+    }
+    // function to show when game is won
+    function winGame() {
+        clearInterval(timerInterval);
+        finalScore = score + timerCount;
+        questionEl.textContent = "You've won! Your score:" + finalScore;
+        hideAll();
+        submitScore(finalScore);
+    }
+    
+    // function to show when game is lost
+    function loseGame() {
+        clearInterval(timerInterval);
+        questionEl.textContent = "Time is up! Your score: " + score;
+        hideAll();
+        submitScore(score);
+    }
+    
+    // Hides buttons, timers, and correct/incorrect text
+    function hideAll() {
+        startButton.remove();
+        correctText.remove();
+        timerText.remove();
+        
+        // removes buttons
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].style.display = "none";
+        }
+    }
